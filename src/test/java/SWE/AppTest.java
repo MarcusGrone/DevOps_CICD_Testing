@@ -7,6 +7,6 @@ public class AppTest {
 
   @Test
   public void testSayHello() {
-    assertEquals("Hello, CI/CD!", App.sayHello());
+    assertEquals("Hello, CI/CD!", App.sayHello()); //Trigger CI
   }
 }
