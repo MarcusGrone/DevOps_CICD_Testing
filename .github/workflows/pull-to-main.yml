@@ -15,30 +15,38 @@ jobs:
       id-token: write
 
     steps:
+      # ✅ Checkout code
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      # ✅ Set up Java for Maven build
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           java-version: '17'
+          distribution: 'temurin'
 
-      - name: Build project (skip tests)
-        run: mvn package -Dmaven.test.skip
+      # ✅ Build the app (skip tests for speed here)
+      - name: Build project
+        run: mvn clean package -DskipTests
 
+      # ✅ Start Minikube
       - name: Start Minikube
         uses: medyagh/setup-minikube@latest
 
-      - name: Check Minikube is running
+      # ✅ Check that Minikube is running
+      - name: Verify Minikube is ready
         run: minikube kubectl get pods -- -A
 
+      # ✅ Build Docker image inside Minikube
       - name: Build Docker image in Minikube
         shell: bash
         run: |
           eval $(minikube -p minikube docker-env)
           minikube image build -t devops-demo:latest .
 
-      - name: Deploy to Minikube
+      # ✅ Deploy to Minikube with kubectl
+      - name: Deploy to Kubernetes
         run: |
           cd k8s
           kubectl apply -f .
