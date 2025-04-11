@@ -23,7 +23,7 @@ jobs:
         with:
           java-version: '17'
 
-      - name: Build project (skip tests for now)
+      - name: Build project (skip tests)
         run: mvn package -Dmaven.test.skip
 
       - name: Start Minikube
@@ -36,7 +36,7 @@ jobs:
         shell: bash
         run: |
           eval $(minikube -p minikube docker-env)
-          minikube image build -t your-image-name:latest .
+          minikube image build -t devops-demo:latest .
 
       - name: Deploy to Minikube
         run: |
