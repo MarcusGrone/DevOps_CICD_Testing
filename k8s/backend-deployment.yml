@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: your-image-name:latest
+          image: devops-demo:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080

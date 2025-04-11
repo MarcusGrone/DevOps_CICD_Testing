@@ -56,7 +56,16 @@ jobs:
       # 🐛 Print backend pod logs (debugging if rollout fails)
       - name: Print backend pod logs
         run: |
-          echo "Fetching backend logs..."
-          kubectl get pods
+          echo " Listing all pods:"
+          kubectl get pods -o wide
+
+          echo " Listing events:"
+          kubectl get events --sort-by=.metadata.creationTimestamp
+
+          echo " Trying to get backend pod name by label:"
+          kubectl get pods --selector=app=backend
+
+          echo " Trying to get logs (if pod exists):"
           POD_NAME=$(kubectl get pods --selector=app=backend -o jsonpath="{.items[0].metadata.name}")
-          kubectl logs $POD_NAME
+          kubectl logs $POD_NAME || echo "🚫 Could not get logs — pod may not exist or has no logs"
+      
